@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نظام الفواتير الذكي | PRO Invoice</title>
+
+    <!-- رمز Google AdSense الخاص بك -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2161407887612919" crossorigin="anonymous"></script>
+
+    <!-- خط تجوال العصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --sidebar-bg: #1e293b;
+            --bg-body: #f1f5f9;
+            --text-main: #334155;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { margin: 0; background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
+
+        /* الهيكل الرئيسي */
+        .app-wrapper { display: flex; min-height: 100vh; }
+
+        /* القائمة الجانبية (Sidebar) */
+        .sidebar {
+            width: 280px; background: var(--sidebar-bg); color: white;
+            padding: 30px 20px; position: fixed; height: 100vh;
+            right: 0; top: 0; z-index: 1000; transition: 0.3s ease;
+        }
+        .sidebar h2 { color: var(--primary); font-size: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 25px; }
+
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+        
+        select, .sidebar input[type="number"] {
+            width: 100%; background: #0f172a; border: 1px solid #334155;
+            color: white; padding: 12px; border-radius: 8px; outline: none;
+        }
+
+        /* مفتاح التبديل */
+        .switch-wrapper { display: flex; justify-content: space-between; align-items: center; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #334155; transition: .4s; border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 14px; width: 14px;
+            left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* منطقة الفاتورة */
+        .main-content { flex: 1; margin-right: 280px; padding: 40px; display: flex; justify-content: center; transition: 0.3s ease; }
+
+        .invoice-paper {
+            width: 210mm; min-height: 297mm; background: white; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 4px; position: relative;
+        }
+
+        .paper-header { display: flex; justify-content: space-between; border-bottom: 3px solid var(--primary); padding-bottom: 20px; margin-bottom: 40px; }
+        .company-name { font-size: 24px; font-weight: 700; border: none; outline: none; width: 100%; }
+        .invoice-label { font-size: 30px; color: #cbd5e1; font-weight: 300; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 30px; }
+        .meta-item { display: flex; gap: 10px; margin-bottom: 10px; font-size: 14px; }
+        .meta-item input { border: none; border-bottom: 1px solid var(--border); width: 130px; outline: none; font-weight: 500; }
+        
+        .client-box label { font-size: 12px; color: var(--primary); font-weight: 700; display: block; }
+        .client-input { width: 100%; font-size: 18px; padding: 10px 0; border: none; border-bottom: 2px solid var(--border); outline: none; transition: 0.3s; }
+        .client-input:focus { border-color: var(--primary); }
+
+        /* الجدول */
+        .table-responsive { width: 100%; overflow-x: auto; margin: 30px 0; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { text-align: right; padding: 12px; background: #f8fafc; border-bottom: 2px solid var(--border); font-size: 14px; }
+        td { padding: 12px; border-bottom: 1px solid var(--border); }
+        td input { border: none; width: 100%; font-size: 15px; outline: none; background: transparent; }
+
+        .btn-add-row { background: none; border: 2px dashed var(--primary); color: var(--primary); padding: 12px; width: 100%; cursor: pointer; border-radius: 8px; font-weight: bold; margin-top: 10px; transition: 0.3s; }
+        .btn-add-row:hover { background: #eff6ff; }
+
+        /* التذييل */
+        .paper-footer { display: flex; justify-content: space-between; margin-top: 50px; gap: 40px; }
+        .notes-area { flex: 1; }
+        .notes-area textarea { width: 100%; height: 100px; border: 1px solid var(--border); border-radius: 8px; padding: 12px; resize: none; outline: none; font-size: 13px; }
+        
+        .totals-area { width: 300px; }
+        .total-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+        .grand-total { border: none; color: var(--primary); font-size: 22px; font-weight: 800; padding-top: 20px; }
+
+        /* أزرار الإجراءات */
+        .btn-main { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-main:hover { background: var(--primary-dark); }
+        .btn-reset { width: 100%; background: none; border: 1px solid #334155; color: #94a3b8; padding: 10px; border-radius: 8px; margin-top: 15px; cursor: pointer; font-size: 13px; }
+
+        /* الجوال */
+        .mobile-nav { display: none; background: var(--sidebar-bg); color: white; padding: 15px 20px; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 2000; }
+        .btn-menu { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+
+        @media (max-width: 850px) {
+            .sidebar { right: -280px; }
+            .sidebar.active { right: 0; }
+            .main-content { margin-right: 0; padding: 15px; }
+            .mobile-nav { display: flex; }
+            .overlay.active { display: block; }
+            .invoice-paper { width: 100%; padding: 25px; min-height: auto; box-shadow: none; border-radius: 0; }
+            .info-grid { grid-template-columns: 1fr; gap: 20px; }
+            .paper-footer { flex-direction: column; }
+            .totals-area { width: 100%; }
+        }
+
+        /* الطباعة */
+        @media print {
+            .no-print, .sidebar, .mobile-nav, .overlay, .btn-add-row { display: none !important; }
+            .main-content { margin: 0; padding: 0; }
+            .invoice-paper { box-shadow: none; width: 100%; padding: 0; border: none; }
+            body { background: white; }
+            @page { size: A4; margin: 1.5cm; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="mobile-nav no-print">
+        <div style="font-weight: 700;">PRO Invoice</div>
+        <button class="btn-menu" onclick="toggleMenu()">☰ الإعدادات</button>
+    </nav>
+
+    <div class="app-wrapper">
+        <aside class="sidebar no-print" id="sidebar">
+            <h2>الإعدادات</h2>
+            <div class="control-group">
+                <label>العملة</label>
+                <select id="currency" onchange="calculate()">
+                    <option value="SAR">ريال سعودي (SAR)</option>
+                    <option value="USD">دولار أمريكي ($)</option>
+                    <option value="EUR">يورو (€)</option>
+                    <option value="EGP">جنيه مصري</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <div class="switch-wrapper">
+                    <span>تفعيل الضريبة</span>
+                    <label class="switch">
+                        <input type="checkbox" id="taxStatus" checked onchange="updateTaxUI()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="control-group" id="taxRateGroup">
+                <label>نسبة الضريبة (%)</label>
+                <input type="number" id="taxRate" value="15" oninput="calculate()">
+            </div>
+            <div style="margin-top: 40px;">
+                <button class="btn-main" onclick="finalizeInvoice()">إصدار وتحميل الفاتورة</button>
+                <button class="btn-reset" onclick="resetCounter()">إعادة ضبط الترقيم</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="invoice-paper">
+                <div class="paper-header">
+                    <div><input type="text" class="company-name" value="اسم مؤسستك هنا"></div>
+                    <div class="invoice-label">فاتورة</div>
+                </div>
+
+                <div class="info-grid">
+                    <div>
+                        <div class="meta-item"><span>رقم الفاتورة:</span><input type="text" id="invoiceNumber" readonly></div>
+                        <div class="meta-item"><span>التاريخ:</span><input type="date" id="invoiceDate"></div>
+                    </div>
+                    <div class="client-box">
+                        <label>العميل</label>
+                        <input type="text" id="clientName" class="client-input" placeholder="أدخل اسم العميل...">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="itemsTable">
+                        <thead>
+                            <tr>
+                                <th>الوصف</th>
+                                <th width="80">الكمية</th>
+                                <th width="120">السعر</th>
+                                <th width="120">الإجمالي</th>
+                                <th width="40" class="no-print"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+                <button class="btn-add-row no-print" onclick="addRow()">+ إضافة بند جديد</button>
+
+                <div class="paper-footer">
+                    <div class="notes-area">
+                        <label style="color:var(--primary); font-weight:700; font-size:12px;">ملاحظات</label>
+                        <textarea id="notes" placeholder="أدخل شروط الدفع أو أي ملاحظات للعميل..."></textarea>
+                    </div>
+                    <div class="totals-area">
+                        <div class="total-row"><span>المجموع الفرعي</span><span id="subTotal">0.00</span></div>
+                        <div class="total-row" id="taxRow"><span>الضريبة (<span id="taxLabel">15</span>%)</span><span id="taxValueText">0.00</span></div>
+                        <div class="total-row grand-total"><span>الإجمالي الكلي</span><span id="grandTotal">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        window.onload = () => {
+            document.getElementById('invoiceDate').valueAsDate = new Date();
+            let nextNum = localStorage.getItem('inv_no') || 1001;
+            document.getElementById('invoiceNumber').value = nextNum;
+            addRow();
+        };
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function addRow() {
+            const tbody = document.getElementById("tbody");
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><input type="text" class="desc" placeholder="وصف البند..."></td>
+                <td><input type="number" class="qty" value="1" min="1" oninput="calculate()"></td>
+                <td><input type="number" class="price" value="0.00" step="0.01" oninput="calculate()"></td>
+                <td style="font-weight:700;"><span class="line-total">0.00</span></td>
+                <td class="no-print"><button onclick="this.closest('tr').remove(); calculate();" style="border:none; background:none; color:#ef4444; cursor:pointer; font-size:18px;">×</button></td>
+            `;
+            tbody.appendChild(row);
+            row.querySelector(".desc").focus();
+        }
+
+        function calculate() {
+            let subtotal = 0;
+            const currency = document.getElementById("currency").value;
+            document.querySelectorAll("#tbody tr").forEach(row => {
+                const q = parseFloat(row.querySelector(".qty").value) || 0;
+                const p = parseFloat(row.querySelector(".price").value) || 0;
+                const t = q * p;
+                row.querySelector(".line-total").innerText = t.toFixed(2);
+                subtotal += t;
+            });
+
+            const taxActive = document.getElementById("taxStatus").checked;
+            const taxRate = parseFloat(document.getElementById("taxRate").value) || 0;
+            const taxVal = taxActive ? (subtotal * (taxRate / 100)) : 0;
+            
+            document.getElementById("taxLabel").innerText = taxRate;
+            document.getElementById("subTotal").innerText = `${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2})} ${currency}`;
+            document.getElementById("taxValueText").innerText = `${taxVal.toLocaleString(undefined, {minimumFractionDigits: 2})} ${currency}`;
+            document.getElementById("grandTotal").innerText = `${(subtotal + taxVal).toLocaleString(undefined, {minimumFractionDigits: 2})} ${currency}`;
+        }
+
+        function updateTaxUI() {
+            const active = document.getElementById("taxStatus").checked;
+            document.getElementById("taxRateGroup").style.display = active ? "block" : "none";
+            document.getElementById("taxRow").style.display = active ? "flex" : "none";
+            calculate();
+        }
+
+        function finalizeInvoice() {
+            const client = document.getElementById("clientName").value.trim();
+            if (!client) { alert("يرجى إدخال اسم العميل"); return; }
+            
+            let cur = parseInt(document.getElementById("invoiceNumber").value);
+            localStorage.setItem('inv_no', cur + 1);
+            if(window.innerWidth < 850) toggleMenu();
+            window.print();
+        }
+
+        function resetCounter() {
+            if(confirm("هل تريد تصفير الترقيم والبدء من 1001؟")) {
+                localStorage.setItem('inv_no', 1001);
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
