@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VATICA | برنامج فواتير ضريبية احترافي مجاني - متوافق مع هيئة الزكاة</title>
-    <meta name="description" content="أنشئ فواتير ضريبية احترافية مجاناً مع VATICA. أداة سهلة الاستخدام للمؤسسات الصغيرة والمتوسطة، تدعم ضريبة القيمة المضافة، QR Code، والتحميل بصيغة PDF.">
-    <meta name="keywords" content="فواتير ضريبية، برنامج فواتير مجاني، فاتورة PDF، ضريبة القيمة المضافة، VATICA، إنشاء فواتير، فواتير السعودية">
-
+    <title>VATICA Business Suite | منصة إدارة الفواتير وعروض الأسعار والعملاء</title>
+    <meta name="description" content="منصة VATICA المتكاملة لإدارة المشاريع الصغيرة: أنشئ فواتير ضريبية، عروض أسعار، وأدر بيانات عملائك في مكان واحد وبخصوصية تامة.">
+    
     <!-- كود Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2161407887612919" crossorigin="anonymous"></script>
-    <script defer src="/_vercel/insights/script.js"></script>
-
+    
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -18,6 +16,7 @@
         :root { 
             --v-blue: #0f172a; 
             --v-primary: #2563eb; 
+            --v-success: #22c55e;
             --v-text: #1e293b; 
             --bg-light: #f1f5f9; 
             --bg-card: white;
@@ -85,9 +84,10 @@
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid var(--border-color); }
         .field-group { display: flex; flex-direction: column; gap: 6px; }
         .field-group label { font-size: 13px; font-weight: 700; color: var(--v-text); }
-        .field-group input { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; background: var(--input-bg); color: var(--v-text); font-size: 14px; transition: background-color 0.3s, color 0.3s; }
+        .field-group input, .field-group select { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; background: var(--input-bg); color: var(--v-text); font-size: 14px; transition: background-color 0.3s, color 0.3s; width: 100%; }
 
-        .v-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .v-table-wrapper { width: 100%; overflow-x: auto; margin: 20px 0; }
+        .v-table { width: 100%; border-collapse: collapse; min-width: 600px; }
         .v-table th { padding: 12px; background: var(--bg-light); border-bottom: 2px solid var(--border-color); text-align: inherit; font-size: 14px; }
         .v-table td { padding: 12px; border-bottom: 1px solid var(--border-color); }
         .v-table input { border: none; outline: none; width: 100%; background: transparent; color: var(--v-text); }
@@ -98,63 +98,59 @@
         .btn-action { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; }
         .btn-download { background: var(--v-primary); color: white; }
         .btn-whatsapp { background: #22c55e; color: white; }
+        .btn-secondary { background: var(--v-blue); color: white; }
+        
         .tpl-btn { flex: 1; padding: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--v-text); border-radius: 6px; cursor: pointer; font-size: 11px; transition: background-color 0.3s, color 0.3s; }
         .tpl-btn.active { background: var(--v-primary); color: white; border-color: var(--v-primary); }
 
-        .seo-content { margin-top: 40px; background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); transition: background-color 0.3s; }
-        .seo-content h2 { color: var(--v-primary); font-size: 22px; margin-bottom: 15px; }
+        .section-title { font-size: 14px; font-weight: bold; margin: 20px 0 10px 0; color: var(--v-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
 
-        .blog-section { margin-top: 40px; background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); transition: background-color 0.3s; }
-        .blog-section h2 { color: var(--v-blue); font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid var(--v-primary); padding-bottom: 10px; }
-        .blog-posts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .post-card { border: 1px solid var(--border-color); background: var(--input-bg); border-radius: 12px; padding: 20px; transition: box-shadow 0.3s, transform 0.2s; }
-        .post-card:hover { box-shadow: 0 8px 20px var(--shadow-color); transform: translateY(-5px); }
-        .post-card h3 { margin-top: 0; font-size: 18px; color: var(--v-primary); margin-bottom: 10px; }
-        .post-card p { font-size: 14px; color: var(--v-text); margin-bottom: 15px; }
-        .post-card a { display: inline-block; color: var(--v-primary); text-decoration: none; font-weight: bold; font-size: 13px; }
-
-        footer { background: var(--v-blue); color: #94a3b8; padding: 40px; text-align: center; margin-top: 50px; }
-        .footer-links { margin-bottom: 15px; }
-        .footer-links a { color: white; text-decoration: none; margin: 0 10px; cursor: pointer; font-size: 14px; }
-
-        .dark-mode-toggle { background: none; border: none; color: white; cursor: pointer; font-size: 18px; margin-left: 15px; padding: 5px; }
-
-        .switch { position: relative; display: inline-block; width: 40px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--v-primary); }
-        input:checked + .slider:before { transform: translateX(16px); }
-        .vat-control { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
-
-        /* Modal Fixes */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background-color: var(--bg-card); padding: 35px; border-radius: 20px; width: 90%; max-width: 650px; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.4); position: relative; color: var(--v-text); }
-        .modal-content h2 { margin-top: 0; color: var(--v-primary); border-bottom: 2px solid var(--v-primary); padding-bottom: 12px; margin-bottom: 20px; font-size: 24px; }
-        .modal-content p { margin-bottom: 15px; font-size: 15px; line-height: 1.8; }
-        .modal-content ul { padding-right: 20px; margin-bottom: 15px; }
-        .modal-content li { margin-bottom: 8px; }
+        
+        .badge { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; margin-right: 5px; }
+        .badge-new { background: #fef3c7; color: #92400e; }
 
+        .client-list { margin-top: 10px; max-height: 150px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+        .client-item { padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--border-color); font-size: 13px; display: flex; justify-content: space-between; }
+        .client-item:hover { background: var(--bg-light); }
+
+        .calc-box { background: var(--bg-light); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .calc-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .calc-row input { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; width: 50%; }
+
+        /* --- Media Queries for Mobile Fix --- */
         @media (max-width: 850px) { 
-            .container { flex-direction: column; } 
-            aside.controls { width: 100%; position: relative; top: 0; } 
-            .info-grid { grid-template-columns: 1fr; } 
+            .container { flex-direction: column; padding: 0 10px; } 
+            aside.controls { width: 100%; position: relative; top: 0; margin-bottom: 20px; } 
             .card { padding: 20px; min-height: auto; }
-            .invoice-head { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+            
+            .invoice-head { 
+                grid-template-columns: 1fr; 
+                grid-template-rows: auto auto auto; 
+                justify-items: center; 
+                text-align: center;
+                gap: 15px;
+            }
             .logo-section { grid-column: 1 / 2; grid-row: 1 / 2; }
-            #qrcode { grid-column: 2 / 3; grid-row: 1 / 2; justify-self: end; }
-            .company-name-area { grid-column: 1 / 3; grid-row: 2 / 3; margin-top: 20px; }
+            .company-name-area { grid-column: 1 / 2; grid-row: 2 / 3; }
+            #qrcode { grid-column: 1 / 2; grid-row: 3 / 4; }
+            
+            .info-grid { grid-template-columns: 1fr; gap: 15px; padding: 15px; }
+            .field-group input, .field-group select { font-size: 16px; padding: 10px; } /* Larger for touch */
+            
+            .sig-container { align-items: center; }
+            canvas#sig-canvas { width: 100%; max-width: 300px; }
         }
 
         @media (max-width: 480px) {
-            header.vatica-nav { padding: 15px 10px; }
+            header.vatica-nav { padding: 15px 10px; flex-direction: column; gap: 10px; }
             .vatica-logo { font-size: 22px; }
-            .vatica-nav nav { gap: 8px !important; }
-            .vatica-nav nav a { margin: 0 2px; font-size: 11px !important; }
-            .invoice-head { grid-template-columns: 1fr; grid-template-rows: auto auto auto; justify-items: center; }
-            .logo-section { grid-column: 1 / 2; grid-row: 1 / 2; }
-            #qrcode { grid-column: 1 / 2; grid-row: 2 / 3; margin-top: 20px; }
-            .company-name-area { grid-column: 1 / 2; grid-row: 3 / 4; margin-top: 20px; }
+            .vatica-nav nav { gap: 8px !important; width: 100%; justify-content: center; }
+            .vatica-nav nav a { font-size: 11px !important; }
+            
+            .card { padding: 15px; }
+            .company-field { font-size: 20px; }
         }
 
         @media print { 
@@ -167,7 +163,7 @@
 <body id="body">
 
     <div class="assistant-bar no-print" id="assistantBar">
-        <span id="txt_assistant">مرحباً بك في VATICA، لنبدأ بصنع قصة نجاح جديدة! ✨</span>
+        <span id="txt_assistant">مرحباً بك في VATICA Business Suite - منصتك الإدارية المتكاملة 🚀</span>
     </div>
 
     <header class="vatica-nav no-print">
@@ -184,14 +180,30 @@
         <aside class="controls no-print">
             <h3 id="txt_control">لوحة التحكم</h3>
             
-            <label style="font-size: 11px; font-weight: bold;" id="txt_tpl_label">قالب الفاتورة:</label>
-            <div style="display:flex; gap:5px; margin: 10px 0 20px 0;">
-                <button class="tpl-btn active" onclick="setTpl('modern', this)" id="txt_tpl_modern">عصري</button>
-                <button class="tpl-btn" onclick="setTpl('classic', this)" id="txt_tpl_classic">كلاسيكي</button>
+            <div class="section-title">نوع المستند <span class="badge badge-new">جديد</span></div>
+            <select id="docType" onchange="updateDocType()" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background: var(--input-bg); color: var(--v-text);">
+                <option value="invoice">فاتورة ضريبية</option>
+                <option value="quotation">عرض سعر رسمي</option>
+            </select>
+
+            <div class="section-title">إدارة العملاء <span class="badge badge-new">جديد</span></div>
+            <button class="btn-action btn-secondary" style="font-size: 12px; padding: 8px;" onclick="showModal('addClient')">+ إضافة عميل جديد</button>
+            <div class="client-list" id="clientList">
+                <!-- سيتم ملؤها برمجياً -->
             </div>
 
-            <label id="txt_curr_label">العملة</label>
-            <select id="currency" onchange="calculate()" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border-color); background: var(--input-bg); color: var(--v-text); transition: background-color 0.3s, color 0.3s;">
+            <div class="section-title">الحاسبة المالية <span class="badge badge-new">جديد</span></div>
+            <div class="calc-box">
+                <div class="calc-row">
+                    <input type="number" id="calcCost" placeholder="التكلفة" oninput="runCalc()">
+                    <input type="number" id="calcMarkup" placeholder="الربح %" oninput="runCalc()">
+                </div>
+                <div id="calcResult" style="font-size: 11px; font-weight: bold; color: var(--v-success); text-align: center;">سعر البيع المقترح: 0.00</div>
+            </div>
+
+            <div class="section-title">الإعدادات العامة</div>
+            <label id="txt_curr_label" style="font-size: 11px;">العملة</label>
+            <select id="currency" onchange="calculate()" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border-color); background: var(--input-bg); color: var(--v-text);">
                 <option value="SAR">SAR (ريال)</option>
                 <option value="USD">USD (دولار)</option>
                 <option value="AED">AED (درهم)</option>
@@ -199,14 +211,14 @@
             </select>
 
             <div class="vat-control">
-                <label for="vatToggle" style="font-weight: bold;" id="txt_vat_label">ضريبة القيمة المضافة (15%)</label>
+                <label for="vatToggle" style="font-weight: bold; font-size: 12px;" id="txt_vat_label">الضريبة (15%)</label>
                 <label class="switch">
                     <input type="checkbox" id="vatToggle" checked onchange="calculate()">
                     <span class="slider"></span>
                 </label>
             </div>
             
-            <button class="btn-action btn-download" id="txt_btn_print" onclick="finalizeInvoice()">📥 تحميل الفاتورة (PDF)</button>
+            <button class="btn-action btn-download" id="txt_btn_print" onclick="finalizeInvoice()">📥 تحميل المستند (PDF)</button>
             <button class="btn-action btn-whatsapp" id="txt_btn_wa" onclick="sendWhatsApp()">💬 إرسال عبر واتساب</button>
         </aside>
 
@@ -222,34 +234,37 @@
                     </div>
                     <div class="company-name-area">
                         <input type="text" class="company-field" id="compName" oninput="saveComp(this.value)" placeholder="اسم مؤسستك هنا...">
+                        <div id="docTitleDisplay" style="font-weight: bold; color: var(--v-primary); margin-top: 5px;">فاتورة ضريبية</div>
                     </div>
                     <div id="qrcode"></div>
                 </div>
 
                 <div class="info-grid">
-                    <div class="field-group"><label id="txt_inv_no">رقم الفاتورة</label><input type="text" id="invNum" readonly></div>
+                    <div class="field-group"><label id="txt_inv_no">رقم المستند</label><input type="text" id="invNum" readonly></div>
                     <div class="field-group"><label id="txt_inv_date">تاريخ الإصدار</label><input type="date" id="invDate"></div>
                     <div class="field-group"><label id="txt_client_label">العميل</label><input type="text" id="clientName" placeholder="اسم العميل..."></div>
-                    <div class="field-group"><label id="txt_tax_no">الرقم الضريبي</label><input type="text" id="txt_tax_p" placeholder="300XXXXXXXXXXXX"></div>
+                    <div class="field-group"><label id="txt_tax_no">الرقم الضريبي للعميل</label><input type="text" id="txt_tax_p" placeholder="300XXXXXXXXXXXX"></div>
                 </div>
 
-                <table class="v-table">
-                    <thead>
-                        <tr><th id="txt_th_desc">الوصف</th><th width="80" id="txt_th_qty">الكمية</th><th width="120" id="txt_th_price">السعر</th><th width="120" id="txt_th_total">الإجمالي</th><th class="no-print" width="30"></th></tr>
-                    </thead>
-                    <tbody id="tbody"></tbody>
-                </table>
-                <button class="no-print" id="txt_btn_add" onclick="addRow()" style="width:100%; padding:10px; cursor:pointer; background:none; border:2px dashed var(--border-color); border-radius:8px; margin-top:10px; color: var(--v-text); transition: color 0.3s;">+ إضافة بند جديد</button>
+                <div class="v-table-wrapper">
+                    <table class="v-table">
+                        <thead>
+                            <tr><th id="txt_th_desc">الوصف</th><th width="80" id="txt_th_qty">الكمية</th><th width="120" id="txt_th_price">السعر</th><th width="120" id="txt_th_total">الإجمالي</th><th class="no-print" width="30"></th></tr>
+                        </thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+                <button class="no-print" id="txt_btn_add" onclick="addRow()" style="width:100%; padding:10px; cursor:pointer; background:none; border:2px dashed var(--border-color); border-radius:8px; margin-top:10px; color: var(--v-text);">+ إضافة بند جديد</button>
 
                 <div style="display:flex; justify-content:space-between; flex-wrap:wrap; margin-top:40px; gap:30px;">
                     <div style="flex:1; min-width:250px;">
-                        <label id="txt_notes_label" style="font-weight:bold; font-size:12px">ملاحظات الفاتورة:</label>
-                        <textarea id="notesArea" style="width:100%; height:80px; border:1px solid var(--border-color); background: var(--input-bg); color: var(--v-text); border-radius:8px; padding:10px; resize:none; transition: background-color 0.3s, color 0.3s;" placeholder="شروط الدفع والملاحظات..."></textarea>
+                        <label id="txt_notes_label" style="font-weight:bold; font-size:12px">ملاحظات وشروط:</label>
+                        <textarea id="notesArea" style="width:100%; height:80px; border:1px solid var(--border-color); background: var(--input-bg); color: var(--v-text); border-radius:8px; padding:10px; resize:none;" placeholder="شروط الدفع، مدة صلاحية العرض، إلخ..."></textarea>
                         <div id="tafqit" style="font-size:12px; color:var(--v-primary); font-weight:bold; margin-top:10px;"></div>
                     </div>
-                    <div style="width:280px; background:var(--bg-light); padding:20px; border-radius:12px; border: 1px solid var(--border-color); transition: background-color 0.3s;">
+                    <div style="width:280px; background:var(--bg-light); padding:20px; border-radius:12px; border: 1px solid var(--border-color);">
                         <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span id="txt_subtotal">المجموع</span><span id="subTotal">0.00</span></div>
-                        <div id="vatRow" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span id="txt_vat">ضريبة القيمة المضافة (15%)</span><span id="vatAmount">0.00</span></div>
+                        <div id="vatRow" style="display:flex; justify-content:space-between; margin-bottom:10px;"><span id="txt_vat">الضريبة (15%)</span><span id="vatAmount">0.00</span></div>
                         <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:22px; color:var(--v-primary); border-top:1px solid var(--border-color); padding-top:10px;">
                             <span id="txt_grandtotal">الإجمالي</span><span id="grandTotal">0.00</span>
                         </div>
@@ -258,32 +273,22 @@
 
                 <div class="sig-container">
                     <canvas id="sig-canvas" width="200" height="80"></canvas>
-                    <p style="font-size:10px; color:#94a3b8;" id="txt_sig_label">التوقيع المعتمد</p>
-                    <button class="no-print" onclick="clearSig()" id="txt_sig_clear" style="border:none; background:none; color:red; cursor:pointer; font-size:10px;">مسح</button>
+                    <p style="font-size:10px; color:#94a3b8;" id="txt_sig_label">التوقيع والختم المعتمد</p>
+                    <button class="no-print" onclick="clearSig()" id="txt_sig_clear" style="border:none; background:none; color:red; cursor:pointer; font-size:10px;">مسح التوقيع</button>
                 </div>
             </article>
 
-            <section class="seo-content no-print">
-                <h2 id="txt_seo_h">برنامج فواتير ضريبية مجاني | VATICA</h2>
-                <p id="txt_seo_p">يوفر موقع فواتيكا الحل الأسرع لإنشاء فواتير احترافية PDF وإرسالها لعملائك عبر واتساب بسهولة تامة وبأمان عالٍ. نحن نلتزم بتوفير أدوات مالية ذكية تساعد رواد الأعمال على تنظيم أعمالهم دون تكاليف إضافية.</p>
-            </section>
-
             <section class="blog-section no-print">
-                <h2 id="txt_blog_h">مدونة VATICA: نصائح مالية لرواد الأعمال</h2>
+                <h2 id="txt_blog_h">مركز المعرفة: نصائح لإدارة مشروعك</h2>
                 <div class="blog-posts">
                     <div class="post-card">
-                        <h3 id="txt_p1_h">أهمية الفواتير الإلكترونية في 2024</h3>
-                        <p id="txt_p1_p">التحول الرقمي ليس مجرد رفاهية، بل ضرورة لنمو مشروعك. تعرف على كيف تساعدك الفواتير الإلكترونية في تتبع تدفقاتك النقدية بدقة وتجنب الأخطاء البشرية الشائعة في الحسابات الورقية.</p>
+                        <h3>الفرق بين عرض السعر والفاتورة</h3>
+                        <p>تعرف على متى يجب إرسال عرض سعر رسمي وكيفية تحويله إلى فاتورة ملزمة قانونياً لضمان حقوقك المالية.</p>
                         <a href="#" onclick="return false;">اقرأ المزيد</a>
                     </div>
                     <div class="post-card">
-                        <h3 id="txt_p2_h">دليل ضريبة القيمة المضافة للمشاريع الصغيرة</h3>
-                        <p id="txt_p2_p">فهم ضريبة القيمة المضافة (VAT) وكيفية حسابها بشكل صحيح يجنبك الغرامات القانونية. في هذا الدليل، نشرح ببساطة آلية تطبيق الضريبة بنسبة 15% وكيفية توثيقها في فواتيرك الرسمية.</p>
-                        <a href="#" onclick="return false;">اقرأ المزيد</a>
-                    </div>
-                    <div class="post-card">
-                        <h3 id="txt_p3_h">كيفية بناء علاقة ثقة مع عملائك</h3>
-                        <p id="txt_p3_p">الاحترافية تبدأ من التفاصيل الصغيرة، مثل شكل فاتورتك وسرعة إرسالها. اكتشف كيف يساهم استخدام نظام فواتير منظم في تعزيز صورة علامتك التجارية وبناء ثقة مستدامة مع عملائك.</p>
+                        <h3>إدارة التدفق النقدي للمشاريع الناشئة</h3>
+                        <p>نصائح عملية حول كيفية جدولة التحصيل وإدارة المصاريف لضمان استمرارية نمو عملك التجاري.</p>
                         <a href="#" onclick="return false;">اقرأ المزيد</a>
                     </div>
                 </div>
@@ -300,123 +305,85 @@
 
     <footer class="no-print">
         <div class="footer-links">
-            <a onclick="showModal('about')" id="txt_f_about">من نحن</a> 
-            <span style="color:#94a3b8;">|</span> 
-            <a onclick="showModal('privacy')" id="txt_f_privacy">الخصوصية</a> 
-            <span style="color:#94a3b8;">|</span> 
-            <a onclick="showModal('terms')" id="txt_f_terms">الشروط</a>
+            <a onclick="showModal('about')">من نحن</a> | <a onclick="showModal('privacy')">الخصوصية</a> | <a onclick="showModal('terms')">الشروط</a>
         </div>
-        <p>© 2024 VATICA.io - جميع الحقوق محفوظة لبرنامج الفواتير الذكي</p>
+        <p>© 2024 VATICA.io - حلول ذكية لإدارة الأعمال</p>
     </footer>
 
     <script>
         let currentLang = 'ar';
-        const websiteUrl = "https://www.vatica.io";
+        let clients = JSON.parse(localStorage.getItem('v_clients') || '[]');
+
         const dict = {
             ar: {
-                langBtn: "English", control: "لوحة التحكم", curr_label: "العملة", btn_print: "📥 تحميل الفاتورة (PDF)", btn_wa: "💬 إرسال عبر واتساب", inv_no: "رقم الفاتورة", inv_date: "تاريخ الإصدار", client_label: "العميل", tax_no: "الرقم الضريبي", th_desc: "الوصف", th_qty: "الكمية", th_price: "السعر", th_total: "الإجمالي", btn_add: "+ إضافة بند جديد", subtotal: "المجموع", grandtotal: "الإجمالي", notes_label: "ملاحظات الفاتورة:", sig_label: "التوقيع المعتمد", sig_clear: "مسح", assistant: "مرحباً بك في VATICA ✨", back: "أهلاً بك مجدداً يا شريك في ", about: "من نحن", privacy: "الخصوصية", terms: "الشروط", modern: "عصري", classic: "كلاسيكي", tpl_label: "قالب الفاتورة:", logo_up: "رفع الشعار", seo_h: "برنامج فواتير ضريبية مجاني | VATICA", seo_p: "أنشئ فواتيرك الاحترافية مجاناً وسهولة تامة.", comp_p: "اسم مؤسستك هنا...", client_p: "اسم العميل...", notes_p: "شروط الدفع والملاحظات...", vat_label: "ضريبة القيمة المضافة (15%)", vat: "ضريبة القيمة المضافة (15%)",
-                blog_h: "مدونة VATICA: نصائح مالية لرواد الأعمال", p1_h: "أهمية الفواتير الإلكترونية في 2024", p1_p: "التحول الرقمي ليس مجرد رفاهية، بل ضرورة لنمو مشروعك. تعرف على كيف تساعدك الفواتير الإلكترونية في تتبع تدفقاتك النقدية بدقة.", p2_h: "دليل ضريبة القيمة المضافة للمشاريع الصغيرة", p2_p: "فهم ضريبة القيمة المضافة (VAT) وكيفية حسابها بشكل صحيح يجنبك الغرامات القانونية. نشرح ببساطة آلية تطبيق الضريبة بنسبة 15%.", p3_h: "كيفية بناء علاقة ثقة مع عملائك", p3_p: "الاحترافية تبدأ من التفاصيل الصغيرة، مثل شكل فاتورتك وسرعة إرسالها. اكتشف كيف يساهم نظام فواتير منظم في تعزيز علامتك التجارية."
+                langBtn: "English", control: "لوحة التحكم", curr_label: "العملة", btn_print: "📥 تحميل المستند (PDF)", btn_wa: "💬 إرسال عبر واتساب", inv_no: "رقم المستند", inv_date: "تاريخ الإصدار", client_label: "العميل", tax_no: "الرقم الضريبي للعميل", th_desc: "الوصف", th_qty: "الكمية", th_price: "السعر", th_total: "الإجمالي", btn_add: "+ إضافة بند جديد", subtotal: "المجموع", grandtotal: "الإجمالي", notes_label: "ملاحظات وشروط:", sig_label: "التوقيع والختم المعتمد", sig_clear: "مسح التوقيع", assistant: "مرحباً بك في VATICA Business Suite 🚀", comp_p: "اسم مؤسستك هنا...", client_p: "اسم العميل...", notes_p: "شروط الدفع، مدة صلاحية العرض، إلخ...", vat_label: "الضريبة (15%)", vat: "الضريبة (15%)"
             },
             en: {
-                langBtn: "العربية", control: "Control Panel", curr_label: "Currency", btn_print: "📥 Download PDF", btn_wa: "💬 Send WhatsApp", inv_no: "Invoice No.", inv_date: "Date", client_label: "Client", tax_no: "Tax ID", th_desc: "Description", th_qty: "Qty", th_price: "Price", th_total: "Total", btn_add: "+ Add Item", subtotal: "Subtotal", grandtotal: "Grand Total", notes_label: "Notes:", sig_label: "Authorized Signature", sig_clear: "Clear", assistant: "Welcome to VATICA ✨", back: "Welcome back partner at ", about: "About Us", privacy: "Privacy Policy", terms: "Terms", modern: "Modern", classic: "Classic", tpl_label: "Templates:", logo_up: "Upload Logo", seo_h: "Free Invoice Generator | VATICA", seo_p: "Create professional invoices easily and for free.", comp_p: "Your Company Name...", client_p: "Client name...", notes_p: "Payment terms and notes...", vat_label: "Value Added Tax (15%)", vat: "VAT (15%)",
-                blog_h: "VATICA Blog: Financial Tips for Entrepreneurs", p1_h: "Importance of E-Invoicing in 2024", p1_p: "Digital transformation is a necessity for growth. Learn how e-invoices help you track cash flows accurately and avoid human errors.", p2_h: "VAT Guide for Small Businesses", p2_p: "Understanding VAT and calculating it correctly avoids legal penalties. We explain the 15% tax mechanism and documentation.", p3_h: "Building Trust with Your Clients", p3_p: "Professionalism starts with small details like invoice design. Discover how an organized system enhances your brand image."
+                langBtn: "العربية", control: "Control Panel", curr_label: "Currency", btn_print: "📥 Download PDF", btn_wa: "💬 Send WhatsApp", inv_no: "Doc No.", inv_date: "Date", client_label: "Client", tax_no: "Client Tax ID", th_desc: "Description", th_qty: "Qty", th_price: "Price", th_total: "Total", btn_add: "+ Add Item", subtotal: "Subtotal", grandtotal: "Grand Total", notes_label: "Notes & Terms:", sig_label: "Authorized Signature & Stamp", sig_clear: "Clear Signature", assistant: "Welcome to VATICA Business Suite 🚀", comp_p: "Your Company Name...", client_p: "Client name...", notes_p: "Payment terms, validity, etc...", vat_label: "Tax (15%)", vat: "Tax (15%)"
             }
         };
 
-        const modalContents = {
-            ar: { 
-                about: `<h2>من نحن</h2>
-                        <p>VATICA هي منصة تقنية رائدة تهدف إلى تمكين أصحاب المشاريع الصغيرة والمتوسطة ورواد الأعمال في العالم العربي من خلال توفير أدوات مالية ذكية ومجانية تماماً.</p>
-                        <p>نحن نؤمن بأن التكنولوجيا يجب أن تكون متاحة للجميع، ولذلك قمنا بتطوير هذا النظام ليكون الأسرع والأسهل في إنشاء الفواتير الضريبية المتوافقة مع المعايير المحلية والدولية.</p>
-                        <ul>
-                            <li>سهولة الاستخدام دون الحاجة لخبرة محاسبية.</li>
-                            <li>دعم كامل لضريبة القيمة المضافة والرموز الضريبية (QR).</li>
-                            <li>خصوصية تامة؛ حيث يتم معالجة بياناتك داخل متصفحك فقط.</li>
-                        </ul>`,
-                privacy: `<h2>سياسة الخصوصية</h2>
-                        <p>في VATICA، نضع خصوصية بياناتك على رأس أولوياتنا. إليك كيف نتعامل مع معلوماتك:</p>
-                        <ul>
-                            <li><strong>تخزين البيانات:</strong> نحن لا نقوم بتخزين أي بيانات خاصة بفواتيرك أو عملائك على خوادمنا. جميع البيانات تُحفظ محلياً في متصفحك (LocalStorage).</li>
-                            <li><strong>ملفات تعريف الارتباط:</strong> نستخدم ملفات تعريف الارتباط لتحسين تجربة المستخدم ولأغراض إعلانية عبر Google AdSense.</li>
-                            <li><strong>مشاركة البيانات:</strong> لا يتم مشاركة أي معلومات شخصية مع أطراف ثالثة، باستثناء ما تتطلبه خدمات الإعلانات والتحليلات لتحسين الخدمة.</li>
-                        </ul>`,
-                terms: `<h2>شروط الاستخدام</h2>
-                        <p>باستخدامك لموقع VATICA، فإنك توافق على الشروط التالية:</p>
-                        <ul>
-                            <li><strong>الخدمة المجانية:</strong> يتم تقديم هذه الخدمة "كما هي" دون أي ضمانات صريحة أو ضمنية.</li>
-                            <li><strong>المسؤولية القانونية:</strong> المستخدم هو المسؤول الوحيد عن صحة البيانات المدخلة في الفواتير ومدى توافقها مع القوانين الضريبية في بلده.</li>
-                            <li><strong>الاستخدام العادل:</strong> يُمنع استخدام الموقع في أي أنشطة غير قانونية أو محاولة الإضرار بالبنية التحتية للمنصة.</li>
-                        </ul>`
-            },
-            en: { 
-                about: `<h2>About Us</h2>
-                        <p>VATICA is a leading tech platform aimed at empowering SMEs and entrepreneurs in the Arab world by providing smart, free financial tools.</p>
-                        <p>We believe technology should be accessible to everyone, which is why we developed this system to be the fastest and easiest way to create tax-compliant invoices.</p>`,
-                privacy: `<h2>Privacy Policy</h2>
-                        <p>At VATICA, your data privacy is our top priority. Here is how we handle your information:</p>
-                        <ul>
-                            <li><strong>Data Storage:</strong> We do not store any invoice or client data on our servers. All data is saved locally in your browser.</li>
-                            <li><strong>Cookies:</strong> We use cookies to enhance user experience and for advertising purposes via Google AdSense.</li>
-                        </ul>`,
-                terms: `<h2>Terms of Use</h2>
-                        <p>By using VATICA, you agree to the following terms:</p>
-                        <ul>
-                            <li><strong>Free Service:</strong> This service is provided "as is" without any warranties.</li>
-                            <li><strong>Legal Responsibility:</strong> The user is solely responsible for the accuracy of the data entered.</li>
-                        </ul>`
-            }
-        };
+        function renderClients() {
+            const list = document.getElementById('clientList');
+            list.innerHTML = clients.length ? '' : '<div style="padding:10px; font-size:11px; text-align:center;">لا يوجد عملاء محفوظون</div>';
+            clients.forEach((c, index) => {
+                const item = document.createElement('div');
+                item.className = 'client-item';
+                item.innerHTML = `<span>${c.name}</span><span style="color:red;" onclick="deleteClient(${index}); event.stopPropagation();">&times;</span>`;
+                item.onclick = () => selectClient(c);
+                list.appendChild(item);
+            });
+        }
+
+        function selectClient(c) {
+            document.getElementById('clientName').value = c.name;
+            document.getElementById('txt_tax_p').value = c.taxId || '';
+            calculate();
+        }
+
+        function deleteClient(index) {
+            clients.splice(index, 1);
+            localStorage.setItem('v_clients', JSON.stringify(clients));
+            renderClients();
+        }
+
+        function saveNewClient() {
+            const name = document.getElementById('newClientName').value;
+            const taxId = document.getElementById('newClientTax').value;
+            if(!name) return alert("يرجى إدخال اسم العميل");
+            clients.push({ name, taxId });
+            localStorage.setItem('v_clients', JSON.stringify(clients));
+            renderClients();
+            closeModal();
+        }
+
+        function runCalc() {
+            const cost = parseFloat(document.getElementById('calcCost').value) || 0;
+            const markup = parseFloat(document.getElementById('calcMarkup').value) || 0;
+            const result = cost + (cost * (markup / 100));
+            document.getElementById('calcResult').innerText = `سعر البيع المقترح: ${result.toFixed(2)}`;
+        }
+
+        function updateDocType() {
+            const type = document.getElementById('docType').value;
+            const title = type === 'invoice' ? (currentLang === 'ar' ? 'فاتورة ضريبية' : 'Tax Invoice') : (currentLang === 'ar' ? 'عرض سعر رسمي' : 'Official Quotation');
+            document.getElementById('docTitleDisplay').innerText = title;
+            document.getElementById('notesArea').placeholder = type === 'invoice' ? dict[currentLang].notes_p : (currentLang === 'ar' ? 'صلاحية العرض، شروط التوريد...' : 'Validity, delivery terms...');
+        }
 
         function toggleLanguage() {
             currentLang = (currentLang === 'ar') ? 'en' : 'ar';
             document.getElementById('htmlRoot').dir = (currentLang === 'ar') ? 'rtl' : 'ltr';
             document.getElementById('langBtn').innerText = dict[currentLang].langBtn;
-            
             Object.keys(dict[currentLang]).forEach(key => {
                 const el = document.getElementById('txt_' + key);
                 if (el) el.innerText = dict[currentLang][key];
-                const fel = document.getElementById('txt_f_' + key);
-                if (fel) fel.innerText = dict[currentLang][key];
             });
-
-            document.getElementById('compName').placeholder = dict[currentLang].comp_p;
-            document.getElementById('clientName').placeholder = dict[currentLang].client_p;
-            document.getElementById('notesArea').placeholder = dict[currentLang].notes_p;
-            updateAssistant(localStorage.getItem('v_comp_name'));
+            updateDocType();
             calculate();
         }
 
         function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
-
-        const canvas = document.getElementById('sig-canvas');
-        const ctx = canvas.getContext('2d');
-        let drawing = false;
-        if (canvas) {
-            const getPos = (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const cx = e.touches ? e.touches[0].clientX : e.clientX;
-                const cy = e.touches ? e.touches[0].clientY : e.clientY;
-                return { x: cx - rect.left, y: cy - rect.top };
-            };
-            const start = (e) => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
-            const move = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
-            const stop = () => drawing = false;
-            canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); window.addEventListener('mouseup', stop);
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e); });
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e); });
-            canvas.addEventListener('touchend', stop);
-        }
-        function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-
-        function sendWhatsApp() {
-            const client = document.getElementById('clientName').value.trim();
-            const total = document.getElementById('grandTotal').innerText;
-            const invNo = document.getElementById('invNum').value;
-            const compName = document.getElementById('compName').value.trim() || "VATICA";
-            if(!client) return alert(dict[currentLang].client_p);
-            const msg = `*فاتورة ضريبية جديدة من ${compName}*\n\n*موجهة إلى:* ${client}\n*رقم الفاتورة:* ${invNo}\n*المبلغ الإجمالي:* ${total}\n\nلتحميل الفاتورة بصيغة PDF: ${websiteUrl}\n\nشكراً لتعاملكم معنا.\nإصدار عبر VATICA.io`;
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
-        }
 
         function handleLogo(input) {
             const reader = new FileReader();
@@ -429,37 +396,31 @@
             printLogo.innerHTML = `<img src="${d}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
             printLogo.style.display = 'block';
         }
+
         function calculate() {
             let sub = 0; 
             const curr = document.getElementById("currency").value;
             const vatEnabled = document.getElementById("vatToggle").checked;
-            const vatRow = document.getElementById("vatRow");
             document.querySelectorAll("#tbody tr").forEach(row => {
                 const q = Math.max(0, parseFloat(row.querySelector(".qty").value) || 0);
                 const p = Math.max(0, parseFloat(row.querySelector(".price").value) || 0);
-                row.querySelector(".qty").value = q;
-                row.querySelector(".price").value = p.toFixed(2);
                 row.querySelector(".line-total").innerText = (q * p).toFixed(2);
                 sub += (q * p);
             });
-            let total = sub;
-            let vatAmount = 0;
-            const vatRate = 0.15;
-            if (vatEnabled) {
-                vatAmount = sub * vatRate;
-                total = sub + vatAmount;
-                vatRow.style.display = 'flex';
-            } else { vatRow.style.display = 'none'; }
+            let vatAmount = vatEnabled ? sub * 0.15 : 0;
+            let total = sub + vatAmount;
             document.getElementById("subTotal").innerText = sub.toFixed(2) + " " + curr;
             document.getElementById("vatAmount").innerText = vatAmount.toFixed(2) + " " + curr;
             document.getElementById("grandTotal").innerText = total.toFixed(2) + " " + curr;
             document.getElementById("tafqit").innerText = (currentLang === 'ar' ? "المبلغ كتابة: " : "In Words: ") + total.toFixed(2) + " " + curr;
             updateQR(total, curr);
         }
+
         function updateQR(t, c) {
             const qr = document.getElementById("qrcode"); qr.innerHTML = "";
             if (typeof QRCode !== 'undefined') { new QRCode(qr, { text: "VATICA: " + t.toFixed(2) + " " + c, width: 80, height: 80 }); }
         }
+
         function addRow() {
             const tbody = document.getElementById("tbody");
             const row = document.createElement("tr");
@@ -468,36 +429,62 @@
                 <td><input type="number" class="qty" value="1" oninput="calculate()"></td>
                 <td><input type="number" class="price" value="0.00" oninput="calculate()"></td>
                 <td style="font-weight:bold" class="line-total">0.00</td>
-                <td class="no-print" style="width: 30px; padding: 0;"><button onclick="this.closest('tr').remove(); calculate();" style="background:none; border:none; color:red; cursor:pointer; font-size:18px;">&times;</button></td>
+                <td class="no-print"><button onclick="this.closest('tr').remove(); calculate();" style="color:red; border:none; background:none; cursor:pointer;">&times;</button></td>
             `;
             tbody.appendChild(row); calculate();
         }
-        function setTpl(t, b) {
-            document.getElementById('invoiceCard').className = 'card template-' + t;
-            document.querySelectorAll('.tpl-btn').forEach(btn => btn.classList.remove('active'));
-            b.classList.add('active');
+
+        function showModal(t) {
+            let content = '';
+            if(t === 'addClient') {
+                content = `<h2>إضافة عميل جديد</h2>
+                           <input type="text" id="newClientName" placeholder="اسم العميل" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;">
+                           <input type="text" id="newClientTax" placeholder="الرقم الضريبي (اختياري)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;">
+                           <button onclick="saveNewClient()" style="width:100%; padding:10px; background:var(--v-primary); color:white; border:none; border-radius:8px;">حفظ العميل</button>`;
+            } else if(t === 'about') {
+                content = `<h2>من نحن</h2><p>VATICA Business Suite هي منصة متكاملة تهدف لتبسيط العمليات الإدارية للمشاريع الصغيرة والمتوسطة عبر أدوات ذكية ومجانية.</p>`;
+            } else if(t === 'privacy') {
+                content = `<h2>سياسة الخصوصية</h2><p>بياناتك ملكك بالكامل. نحن لا نخزن أي بيانات على خوادمنا؛ كل شيء يتم حفظه محلياً في متصفحك لضمان أقصى درجات الأمان.</p>`;
+            }
+            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('modalOverlay').style.display = 'flex';
         }
-        function updateAssistant(name) {
-            const bar = document.getElementById('txt_assistant');
-            bar.innerText = (name && name.trim() !== "") ? (dict[currentLang].back + name + "! 🚀") : dict[currentLang].assistant;
-        }
-        function saveComp(v) { localStorage.setItem('v_comp_name', v); updateAssistant(v); }
-        function showModal(t) { document.getElementById('modalBody').innerHTML = modalContents[currentLang][t]; document.getElementById('modalOverlay').style.display = 'flex'; }
+
         function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+
         function finalizeInvoice() { 
             let currentInvNum = parseInt(document.getElementById('invNum').value);
-            if (!isNaN(currentInvNum)) { localStorage.setItem('v_count', currentInvNum + 1); }
+            localStorage.setItem('v_count', currentInvNum + 1); 
             window.print(); 
         }
-        
+
+        const canvas = document.getElementById('sig-canvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        if (canvas) {
+            const getPos = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const cx = e.touches ? e.touches[0].clientX : e.clientX;
+                const cy = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: cx - rect.left, y: cy - rect.top };
+            };
+            canvas.addEventListener('mousedown', (e) => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+            canvas.addEventListener('mousemove', (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+            window.addEventListener('mouseup', () => drawing = false);
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+            canvas.addEventListener('touchend', () => drawing = false);
+        }
+        function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('v_comp_name'); if(saved) { document.getElementById('compName').value = saved; updateAssistant(saved); }
+            const saved = localStorage.getItem('v_comp_name'); if(saved) document.getElementById('compName').value = saved;
             const logo = localStorage.getItem('v_logo'); if(logo) renderLogo(logo);
             document.getElementById('invDate').valueAsDate = new Date();
             document.getElementById('invNum').value = localStorage.getItem('v_count') || 1001;
-            if (document.querySelectorAll("#tbody tr").length === 0) { addRow(); }
-            currentLang = 'en';
-            toggleLanguage();
+            if (document.querySelectorAll("#tbody tr").length === 0) addRow();
+            renderClients();
+            currentLang = 'en'; toggleLanguage();
         });
     </script>
 </body>
