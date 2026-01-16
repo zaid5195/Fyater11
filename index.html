@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vatica | منصة إنشاء الفواتير الاحترافية</title>
+    
+    <!-- AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2161407887612919" crossorigin="anonymous"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --vatica-blue: #0f172a;
+            --vatica-primary: #3b82f6;
+            --bg-light: #f8fafc;
+        }
+
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { margin: 0; background-color: var(--bg-light); color: #1e293b; transition: all 0.3s ease; }
+        
+        /* اتجاهات الصفحة */
+        [dir="rtl"] .main-content { margin-right: 320px; margin-left: 0; }
+        [dir="ltr"] .main-content { margin-left: 320px; margin-right: 0; }
+
+        header.vatica-nav {
+            background: var(--vatica-blue);
+            color: white;
+            padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .vatica-logo { font-size: 26px; font-weight: 700; letter-spacing: 2px; }
+        .vatica-logo span { color: var(--vatica-primary); }
+
+        .container { display: flex; max-width: 1400px; margin: 30px auto; padding: 0 20px; gap: 30px; }
+
+        aside.controls { width: 320px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); height: fit-content; position: fixed; }
+        main.editor { flex: 1; margin-right: 340px; } /* يتم تعديله برمجياً عند تغيير اللغة */
+
+        .card { background: white; padding: 40px; border-radius: 4px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); min-height: 297mm; position: relative; }
+
+        .invoice-head { display: flex; justify-content: space-between; border-bottom: 4px solid var(--vatica-primary); padding-bottom: 20px; margin-bottom: 30px; }
+        .company-field { font-size: 28px; font-weight: 700; border: none; outline: none; width: 60%; color: var(--vatica-blue); }
+        
+        .field-group label { display: block; font-size: 12px; color: #64748b; font-weight: bold; margin-bottom: 5px; }
+        .field-group input { width: 100%; border: none; border-bottom: 1px solid #e2e8f0; padding: 8px 0; font-size: 16px; outline: none; margin-bottom: 20px; }
+
+        .v-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .v-table th { text-align: inherit; background: #f1f5f9; padding: 12px; font-size: 13px; border-bottom: 2px solid #e2e8f0; }
+        .v-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        .v-table input { border: none; width: 100%; outline: none; background: transparent; }
+
+        .btn-add-item { width: 100%; padding: 12px; border: 2px dashed #cbd5e1; background: none; color: #64748b; font-weight: bold; cursor: pointer; border-radius: 8px; }
+
+        .summary-wrapper { display: flex; justify-content: space-between; margin-top: 50px; gap: 30px; }
+        .totals-box { width: 300px; background: #f8fafc; padding: 20px; border-radius: 12px; }
+        .total-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .grand-total-row { border-top: 2px solid #e2e8f0; padding-top: 15px; font-size: 20px; font-weight: 700; color: var(--vatica-primary); }
+
+        .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
+        .btn-download { background: var(--vatica-primary); color: white; }
+        .btn-lang { background: transparent; border: 1px solid white; color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; }
+
+        footer { background: var(--vatica-blue); color: #94a3b8; padding: 40px; text-align: center; margin-top: 50px; }
+
+        @media print {
+            .no-print { display: none !important; }
+            aside.controls { display: none; }
+            main.editor { margin: 0 !important; width: 100%; }
+            .card { box-shadow: none; padding: 0; }
+        }
+
+        @media (max-width: 900px) {
+            .container { flex-direction: column; }
+            aside.controls { position: relative; width: 100%; }
+            main.editor { margin: 0 !important; }
+        }
+    </style>
+</head>
+<body id="body">
+
+    <header class="vatica-nav no-print">
+        <div class="vatica-logo">VATICA<span>.io</span></div>
+        <div class="nav-tools">
+            <button class="btn-lang" id="langBtn" onclick="toggleLanguage()">English</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="controls no-print" id="sidebar">
+            <h3 id="txt-control">لوحة التحكم</h3>
+            <div style="margin-bottom:20px">
+                <label id="txt-curr-label">العملة</label>
+                <select id="currency" onchange="calculate()" style="width:100%; padding:10px; border-radius:8px;">
+                    <option value="SAR">SAR (ريال)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                </select>
+            </div>
+            <div style="margin-bottom:20px">
+                <label id="txt-tax-label">الضريبة (%)</label>
+                <input type="number" id="taxRate" value="15" oninput="calculate()" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+            </div>
+            <button class="btn-action btn-download" id="txt-btn-print" onclick="finalizeInvoice()">تحميل وطباعة الفاتورة</button>
+        </aside>
+
+        <!-- Invoice Editor -->
+        <main class="editor" id="mainEditor">
+            <div class="card">
+                <div class="invoice-head">
+                    <input type="text" class="company-field" id="txt-comp-placeholder" placeholder="اسم مؤسستك هنا...">
+                    <div id="qrcode"></div>
+                </div>
+
+                <div class="input-grid">
+                    <div class="field-group">
+                        <label id="txt-inv-no">رقم الفاتورة</label>
+                        <input type="text" id="invNum" readonly>
+                        <label id="txt-inv-date">تاريخ الإصدار</label>
+                        <input type="date" id="invDate">
+                    </div>
+                    <div class="field-group">
+                        <label id="txt-client-label">العميل</label>
+                        <input type="text" id="clientName" id="txt-client-placeholder" placeholder="اسم العميل...">
+                        <label id="txt-tax-no">الرقم الضريبي</label>
+                        <input type="text" placeholder="123456789">
+                    </div>
+                </div>
+
+                <table class="v-table">
+                    <thead>
+                        <tr>
+                            <th id="txt-th-desc">الوصف</th>
+                            <th id="txt-th-qty">الكمية</th>
+                            <th id="txt-th-price">السعر</th>
+                            <th id="txt-th-total">الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+                <button class="btn-add-item no-print" id="txt-btn-add" onclick="addRow()">+ إضافة بند جديد</button>
+
+                <div class="summary-wrapper">
+                    <div style="flex:1">
+                        <label id="txt-notes-label" style="font-weight:bold; font-size:12px">ملاحظات:</label>
+                        <textarea id="txt-notes-placeholder" style="width:100%; height:80px; border:1px solid #e2e8f0; border-radius:8px; padding:10px; margin-top:5px; resize:none;" placeholder="شروط الدفع..."></textarea>
+                    </div>
+                    <div class="totals-box">
+                        <div class="total-row">
+                            <span id="txt-subtotal">المجموع الفرعي</span>
+                            <span id="subTotal">0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span id="txt-tax-val">الضريبة</span>
+                            <span id="taxAmountText">0.00</span>
+                        </div>
+                        <div class="total-row grand-total-row">
+                            <span id="txt-grandtotal">الإجمالي الكلي</span>
+                            <span id="grandTotal">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEO Section -->
+            <section class="no-print" style="margin-top:30px; background:white; padding:20px; border-radius:12px;">
+                <h2 id="txt-seo-h">لماذا تختار منصة Vatica؟</h2>
+                <p id="txt-seo-p">Vatica توفر لك أفضل تجربة لإنشاء الفواتير الضريبية مجاناً وبكل لغات العالم. نظامنا آمن وسريع ويدعم الطباعة المباشرة.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 VATICA.io - All Rights Reserved</p>
+    </footer>
+
+    <script>
+        let currentLang = 'ar';
+
+        const dict = {
+            ar: {
+                lang: "English",
+                control: "لوحة التحكم",
+                curr: "العملة",
+                tax: "الضريبة (%)",
+                print: "تحميل وطباعة الفاتورة",
+                add: "+ إضافة بند جديد",
+                comp_p: "اسم مؤسستك هنا...",
+                inv_no: "رقم الفاتورة",
+                inv_date: "تاريخ الإصدار",
+                client: "العميل",
+                client_p: "اسم العميل...",
+                tax_no: "الرقم الضريبي",
+                th_desc: "الوصف",
+                th_qty: "الكمية",
+                th_price: "السعر",
+                th_total: "الإجمالي",
+                subtotal: "المجموع الفرعي",
+                tax_val: "الضريبة",
+                grandtotal: "الإجمالي الكلي",
+                notes: "ملاحظات:",
+                notes_p: "شروط الدفع والملاحظات...",
+                seo_h: "لماذا تختار منصة Vatica؟",
+                seo_p: "Vatica توفر لك أفضل تجربة لإنشاء الفواتير الضريبية مجاناً وبكل لغات العالم."
+            },
+            en: {
+                lang: "العربية",
+                control: "Control Panel",
+                curr: "Currency",
+                tax: "Tax Rate (%)",
+                print: "Print & Download PDF",
+                add: "+ Add New Item",
+                comp_p: "Your Company Name...",
+                inv_no: "Invoice Number",
+                inv_date: "Issue Date",
+                client: "Client",
+                client_p: "Client Name...",
+                tax_no: "Tax Number",
+                th_desc: "Description",
+                th_qty: "Qty",
+                th_price: "Price",
+                th_total: "Total",
+                subtotal: "Subtotal",
+                tax_val: "Tax Value",
+                grandtotal: "Grand Total",
+                notes: "Notes:",
+                notes_p: "Payment terms and notes...",
+                seo_h: "Why choose Vatica?",
+                seo_p: "Vatica provides the best experience for creating tax invoices for free in all languages."
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = (currentLang === 'ar') ? 'en' : 'ar';
+            const body = document.getElementById('body');
+            const editor = document.getElementById('mainEditor');
+            
+            // تغيير اتجاه الصفحة
+            if(currentLang === 'en') {
+                body.dir = "ltr";
+                editor.style.marginRight = "0";
+                editor.style.marginLeft = "340px";
+            } else {
+                body.dir = "rtl";
+                editor.style.marginLeft = "0";
+                editor.style.marginRight = "340px";
+            }
+
+            // تحديث النصوص
+            document.getElementById('langBtn').innerText = dict[currentLang].lang;
+            document.getElementById('txt-control').innerText = dict[currentLang].control;
+            document.getElementById('txt-curr-label').innerText = dict[currentLang].curr;
+            document.getElementById('txt-tax-label').innerText = dict[currentLang].tax;
+            document.getElementById('txt-btn-print').innerText = dict[currentLang].print;
+            document.getElementById('txt-btn-add').innerText = dict[currentLang].add;
+            document.getElementById('txt-comp-placeholder').placeholder = dict[currentLang].comp_p;
+            document.getElementById('txt-inv-no').innerText = dict[currentLang].inv_no;
+            document.getElementById('txt-inv-date').innerText = dict[currentLang].inv_date;
+            document.getElementById('txt-client-label').innerText = dict[currentLang].client;
+            document.getElementById('clientName').placeholder = dict[currentLang].client_p;
+            document.getElementById('txt-tax-no').innerText = dict[currentLang].tax_no;
+            document.getElementById('txt-th-desc').innerText = dict[currentLang].th_desc;
+            document.getElementById('txt-th-qty').innerText = dict[currentLang].th_qty;
+            document.getElementById('txt-th-price').innerText = dict[currentLang].th_price;
+            document.getElementById('txt-th-total').innerText = dict[currentLang].th_total;
+            document.getElementById('txt-subtotal').innerText = dict[currentLang].subtotal;
+            document.getElementById('txt-tax-val').innerText = dict[currentLang].tax_val;
+            document.getElementById('txt-grandtotal').innerText = dict[currentLang].grandtotal;
+            document.getElementById('txt-notes-label').innerText = dict[currentLang].notes;
+            document.getElementById('txt-notes-placeholder').placeholder = dict[currentLang].notes_p;
+            document.getElementById('txt-seo-h').innerText = dict[currentLang].seo_h;
+            document.getElementById('txt-seo-p').innerText = dict[currentLang].seo_p;
+            
+            calculate();
+        }
+
+        window.onload = () => {
+            document.getElementById('invDate').valueAsDate = new Date();
+            document.getElementById('invNum').value = localStorage.getItem('v_count') || 1001;
+            addRow();
+        };
+
+        function addRow() {
+            const tbody = document.getElementById("tbody");
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><input type="text" placeholder="..."></td>
+                <td><input type="number" class="qty" value="1" oninput="calculate()"></td>
+                <td><input type="number" class="price" value="0.00" oninput="calculate()"></td>
+                <td style="font-weight:bold"><span class="line-total">0.00</span></td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        function calculate() {
+            let subtotal = 0;
+            const currency = document.getElementById("currency").value;
+            document.querySelectorAll("#tbody tr").forEach(row => {
+                const q = parseFloat(row.querySelector(".qty").value) || 0;
+                const p = parseFloat(row.querySelector(".price").value) || 0;
+                const total = q * p;
+                row.querySelector(".line-total").innerText = total.toFixed(2);
+                subtotal += total;
+            });
+
+            const taxRate = parseFloat(document.getElementById("taxRate").value) || 0;
+            const taxAmount = subtotal * (taxRate / 100);
+            const grandTotal = subtotal + taxAmount;
+
+            document.getElementById("subTotal").innerText = subtotal.toFixed(2) + " " + currency;
+            document.getElementById("taxAmountText").innerText = taxAmount.toFixed(2) + " " + currency;
+            document.getElementById("grandTotal").innerText = grandTotal.toFixed(2) + " " + currency;
+            
+            updateQR(grandTotal, currency);
+        }
+
+        function updateQR(total, curr) {
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, { text: "Vatica Invoice Total: " + total + " " + curr, width: 80, height: 80 });
+        }
+
+        function finalizeInvoice() {
+            localStorage.setItem('v_count', parseInt(document.getElementById('invNum').value) + 1);
+            window.print();
+        }
+    </script>
+</body>
+</html>
